@@ -14,8 +14,10 @@ DerivedData/
 .Spotlight-V100
 .Trashes
 
-# Xcode build files
+# Build and profiling
 build/
+*.profraw
+*.profdata
 *.mode1v3
 *.mode2v3
 *.perspectivev3

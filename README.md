@@ -1,6 +1,6 @@
 # Solitaire Glass (macOS SwiftUI)
 
-A native macOS Solitaire (Klondike) game built with Swift 6 and SwiftUI, styled with Apple's modern glassmorphic aesthetic (frosted acrylic materials, specular rim lighting, ambient dynamic felt/mesh gradients, and fluid physics).
+A native macOS Klondike Solitaire game built with **Swift 6** and **SwiftUI**, featuring Apple's latest glassmorphic aesthetic (frosted acrylic materials, specular rim lighting, ambient dynamic felt/mesh gradients, and fluid physical card interactions).
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14.0%2B-blue)
 ![Swift 6](https://img.shields.io/badge/Swift-6.0-orange)
@@ -9,97 +9,100 @@ A native macOS Solitaire (Klondike) game built with Swift 6 and SwiftUI, styled 
 
 ---
 
-## ✨ Features
+## 📸 Screenshots
 
-- **Apple Glassmorphic Design**:
-  - Translucent frosted glass cards with specular edge gradients and inner glow.
-  - Modern Classic Linen deck option for high-contrast traditional paper feel.
-  - Dynamic ambient backgrounds: Emerald Felt, Midnight Obsidian, Royal Blue, Velvet Nebula, and Aurora Glass.
-  - Support for **Custom Background** and **Custom Card Back** images imported directly from Finder.
-  - Native **Dark Mode** and **Light Mode** support (System, Dark, Light).
-- **Physical Drag-and-Drop**:
-  - Drag-and-drop interaction with physical card lifting, elevation shadows, and target glow.
-  - Multi-card stack dragging down tableau columns.
-- **Classic Klondike Rules & Flexibility**:
-  - Toggle between **Draw 1** and **Draw 3** modes in Settings.
-  - **Standard** and **Vegas** scoring modes.
-  - Optional timer display.
-- **Polish & Assists**:
-  - **Unlimited Undo and Redo** (`Cmd+Z`, `Cmd+Shift+Z`).
-  - **Smart Hint System** (`Cmd+H`) analyzing board state for legal and strategic moves.
-  - **Auto Finish Button** (`Cmd+Shift+A`) when all cards are face up.
-  - **Celebratory Bouncing Card Cascade**: 60/120fps physics simulation with card trails upon winning.
-  - **Procedural Sound Engine**: Crisp low-latency synthesized sounds for flips, slides, taps, foundation chimes, and win fanfare (volume adjustable, toggleable).
-- **Statistics & Persistence**:
-  - Persisted tracking of games played, games won, win rate, winning streaks, best time, and high scores.
-- **macOS System Integration**:
-  - Standard Preferences / Settings window (`Cmd+,`).
-  - Native Menu Bar shortcuts (`Cmd+N`, `Cmd+R`, `Cmd+Z`, `Cmd+Shift+Z`, `Cmd+H`, `Space`).
+### Frosted Glass Deck on Emerald Felt
+![Solitaire Glass Gameplay](docs/screenshots/gameplay.png)
+
+### Modern Classic Linen Deck on Midnight Obsidian
+![Solitaire Glass Dark Theme](docs/screenshots/dark_theme.png)
 
 ---
 
-## 🛠 Project Structure
+## 🎮 How the Game Works
 
-```
-native-macos-solitaire/
-├── project.yml                     # XcodeGen declarative project configuration
-├── SolitaireGlass.xcodeproj        # Native Xcode project file
-├── Sources/
-│   ├── App/
-│   │   └── SolitaireApp.swift      # Main @main App, window, commands & menu bar
-│   ├── Models/
-│   │   ├── Suit.swift              # Suit definitions (Clubs, Diamonds, Hearts, Spades)
-│   │   ├── Rank.swift              # Card rank definitions (Ace through King)
-│   │   ├── Card.swift              # Card struct & standard 52-card deck generator
-│   │   ├── GameMove.swift          # Move models & location tracking for undo/redo
-│   │   ├── GameSettings.swift      # Observable user preferences (themes, rules, audio)
-│   │   └── GameStats.swift         # Observable stats (win rate, streaks, best scores)
-│   ├── Services/
-│   │   └── AudioService.swift      # Procedural sound effect synthesizer
-│   ├── ViewModels/
-│   │   ├── SolitaireViewModel.swift # Game state, drag-and-drop controller, auto-complete
-│   │   └── HintEngine.swift        # Safe move analysis & strategic hint solver
-│   └── Views/
-│       ├── BoardView.swift         # Top-level game board layout & drop coordinates
-│       ├── CardView.swift          # Card face view (Glass vs Linen, custom court art)
-│       ├── CardBackView.swift      # Card back patterns & custom user image rendering
-│       ├── TableauColumnView.swift # Cascading tableau columns with multi-card drag
-│       ├── FoundationView.swift    # 4 foundation piles with suit watermark slots
-│       ├── StockWasteView.swift    # Draw pile and fanned waste pile
-│       ├── ToolbarView.swift       # Glassmorphic HUD with score, moves, time & controls
-│       ├── GlassBackgroundView.swift # Ambient felt & obsidian mesh gradients
-│       ├── WinCascadeView.swift    # Celebratory bouncing card physics animation
-│       ├── DropTargetModifier.swift # PreferenceKey spatial drop target detector
-│       └── SettingsView.swift      # Native macOS Preferences window (Cmd+,)
-├── Tests/
-│   └── SolitaireGameTests.swift    # Unit tests for rules, dealing, moves, and undo/redo
-└── Resources/
-    └── Assets.xcassets             # App icon and asset catalog
-```
+Solitaire Glass implements the complete, authentic rules of classic **Klondike Solitaire** with physical drag-and-drop mechanics and modern macOS polish:
+
+### 1. Game Board Layout
+- **The Stock (Draw Pile)**: Located at the top-left, holding the remaining 24 cards. Click to deal 1 or 3 cards to the Waste pile. When empty, click to recycle the waste cards back into the stock.
+- **The Waste (Discard Pile)**: Placed next to the stock. The top card is always available to drag to the Tableau or Foundation. In Draw 3 mode, cards are rendered in an overlapping fan.
+- **The Foundations (4 Suit Piles)**: Located at the top-right, marked with subtle etched suit watermarks (♠, ♥, ♣, ♦). Build each suit up in ascending order from **Ace to King** (A, 2, 3... Q, K).
+- **The Tableau (7 Columns)**: Columns 1 through 7 start with 1 to 7 cards respectively, with only the bottom-most card face-up. Cards are built down in **descending rank** with **alternating colors** (e.g. Red 9 on Black 10). Empty columns can only be filled by a **King** (or a stack starting with a King).
+
+### 2. Interaction & Drag-and-Drop Model
+- **Physical Drag-and-Drop**: Built with fluid gesture tracking. Lifting a card dynamically scales it up, adds an elevated drop shadow, and illuminates legal destination slots with a soft glowing rim.
+- **Multi-Card Stack Dragging**: Dragging any face-up card in a tableau column lifts all face-up cards beneath it as a unified stack.
+- **Auto-Flip**: Moving cards away from a tableau column automatically reveals and flips the newly exposed face-down card.
+
+### 3. Scoring Modes
+- **Standard Scoring**:
+  - Waste to Tableau: `+5 pts`
+  - Waste to Foundation: `+10 pts`
+  - Tableau to Foundation: `+10 pts`
+  - Turn over Tableau card: `+5 pts`
+  - Foundation back to Tableau: `-15 pts`
+  - Stock Recycle: `-100 pts` (Draw 1 mode) or `-20 pts` after 3 passes (Draw 3 mode)
+  - Timed Bonus: Awarded upon winning based on elapsed time (`max(0, 700,000 / seconds)`).
+- **Vegas Scoring**:
+  - Starts at `-$52` (buying the deck for $1 per card).
+  - Each card placed into the foundation awards `+$5`. Maximum profit: `+$208`.
+
+### 4. Smart Assists & Quality of Life
+- **Unlimited Undo & Redo** (`Cmd+Z`, `Cmd+Shift+Z`): Reverses moves, score changes, and flipped cards seamlessly.
+- **Smart Hint System** (`Cmd+H`): Analyzes the board in real-time to find safe foundation transfers, hidden card revelations, or stock draws.
+- **Auto-Finish Button** (`Cmd+Shift+A`): Appears automatically when all cards on the tableau are face up and the stock/waste are cleared, cascading the remaining cards to the foundations.
+- **Celebratory Win Cascade**: Iconic 60/120fps physics simulation with gravity and card trail stamping when the game is won.
+- **Procedural Audio Engine**: High-fidelity synthesized audio feedback for card slides, flips, felt taps, foundation chimes, and win fanfare using `AVAudioEngine`.
 
 ---
 
-## 🚀 Building & Running
+## 🎨 Customization & Appearance
 
-### Option 1: Xcode
-1. Double-click `SolitaireGlass.xcodeproj` to open in Xcode.
-2. Select the `SolitaireGlass` scheme and click **Run** (`Cmd+R`).
+Accessible via **Preferences / Settings** (`Cmd+,`):
 
-### Option 2: Command Line (`xcodebuild`)
-To build the application bundle:
+| Setting | Options |
+| :--- | :--- |
+| **Card Deck Style** | Translucent Frosted Glass vs Modern Classic Linen |
+| **Interface Appearance** | System, Dark Mode, Light Mode |
+| **Table Background** | Emerald Felt, Midnight Obsidian, Royal Blue Felt, Velvet Nebula, Aurora Glass, or **Custom Image** |
+| **Card Back Design** | Geometric Glass, Royal Sapphire, Crimson Velvet, Obsidian Minimal, or **Custom Image** |
+| **Draw Mode** | Draw 1 (Casual) or Draw 3 (Challenging) |
+| **Scoring Mode** | Standard or Vegas |
+| **Audio Controls** | Master sound toggle and volume slider |
+| **Statistics** | Total games, win percentage, current & longest streak, best time, and high scores |
+
+---
+
+## 🚀 Guide to Running the Game
+
+### Prerequisites
+- macOS 14.0 (Sonoma) or macOS 15.0+ (Sequoia)
+- Xcode 16.0+ (or Apple Command Line Tools)
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (optional, if you want to regenerate the `.xcodeproj` from `project.yml`)
+
+### Method 1: Running in Xcode (Recommended)
+1. Open [`SolitaireGlass.xcodeproj`](SolitaireGlass.xcodeproj) in Xcode:
+   ```bash
+   open SolitaireGlass.xcodeproj
+   ```
+2. In the toolbar, ensure the **SolitaireGlass** scheme and **My Mac** destination are selected.
+3. Press **Run** (`Cmd + R`) or click the Play button.
+
+### Method 2: Running via Terminal
+Build and launch the application directly from the command line:
+
 ```bash
+# Build the application target
 xcodebuild -project SolitaireGlass.xcodeproj -scheme SolitaireGlass build
+
+# Launch the compiled macOS app
+open $(find ~/Library/Developer/Xcode/DerivedData/SolitaireGlass-* -name "SolitaireGlass.app" | head -n 1)
 ```
 
-To run all unit tests:
+### Method 3: Running Automated Unit Tests
+To verify game rules, deck generation, move validations, and statistics:
 ```bash
 xcodebuild -project SolitaireGlass.xcodeproj -scheme SolitaireGlassTests test
-```
-
-### Regenerating Project Files (`xcodegen`)
-If you modify `project.yml`:
-```bash
-xcodegen generate
 ```
 
 ---
@@ -108,11 +111,11 @@ xcodegen generate
 
 | Shortcut | Action |
 | :--- | :--- |
-| `Cmd + N` | New Game |
-| `Cmd + R` | Restart Current Game |
-| `Space` | Draw Card from Stock |
+| `Cmd + N` | Start New Game |
+| `Cmd + R` | Restart Current Game (same deal) |
+| `Space` | Draw Card(s) from Stock / Recycle Waste |
 | `Cmd + Z` | Undo Move |
 | `Cmd + Shift + Z` | Redo Move |
-| `Cmd + H` | Request Hint |
-| `Cmd + Shift + A` | Auto Finish (when available) |
-| `Cmd + ,` | Open Settings & Appearance |
+| `Cmd + H` | Request Strategic Hint |
+| `Cmd + Shift + A` | Auto Finish (available when all cards are face up) |
+| `Cmd + ,` | Open Preferences & Theme Customization |
