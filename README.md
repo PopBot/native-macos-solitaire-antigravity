@@ -1,4 +1,4 @@
-# Solitaire Glass (macOS SwiftUI)
+# <img src="docs/screenshots/app_icon.png" width="48" height="48" alt="Solitaire Glass Icon" style="vertical-align: middle;" /> Solitaire Glass (macOS SwiftUI)
 
 A native macOS Klondike Solitaire game built with **Swift 6** and **SwiftUI**, featuring Apple's latest glassmorphic aesthetic (frosted acrylic materials, specular rim lighting, ambient dynamic felt/mesh gradients, and fluid physical card interactions).
 
@@ -10,6 +10,11 @@ A native macOS Klondike Solitaire game built with **Swift 6** and **SwiftUI**, f
 ---
 
 ## 📸 Screenshots
+
+### Application Icon
+<p align="left">
+  <img src="docs/screenshots/app_icon.png" width="140" height="140" alt="Solitaire Glass macOS Icon" />
+</p>
 
 ### Frosted Glass Deck on Emerald Felt
 ![Solitaire Glass Gameplay](docs/screenshots/gameplay.png)
