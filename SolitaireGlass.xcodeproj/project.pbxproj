@@ -15,6 +15,7 @@
 		299480E20EBB62442B8D7A84 /* SolitaireGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8E7E69872C4F04768F5D06 /* SolitaireGameTests.swift */; };
 		306929D7BC7EE5A293FEC0D2 /* SolitaireApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D220FF18D1F2E231B5C3083 /* SolitaireApp.swift */; };
 		35B86598A4AAE2201EAB6C87 /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35B36E89B1D0DA4FE294DD6 /* GameSettings.swift */; };
+		5F5E48C1104FA22EE6063CA3 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 358928EA999247E69CFF8494 /* AppIcon.icns */; };
 		70D654D25BECB8469275441C /* WinCascadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBFE46671B612BB10417D2DA /* WinCascadeView.swift */; };
 		713F8EF78891DD1D3E232610 /* SolitaireViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC111CB2CC6C9691E082D37 /* SolitaireViewModel.swift */; };
 		750BD377D6E67636FF34F0A5 /* Suit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6E4FE425DBA82991E413B6 /* Suit.swift */; };
@@ -49,6 +50,7 @@
 		1FF74408374F69C2A30D2F38 /* DropTargetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropTargetModifier.swift; sourceTree = "<group>"; };
 		26881816B838978750E06AF1 /* HintEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintEngine.swift; sourceTree = "<group>"; };
 		2FC111CB2CC6C9691E082D37 /* SolitaireViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolitaireViewModel.swift; sourceTree = "<group>"; };
+		358928EA999247E69CFF8494 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		3D8376489F25B72184CC652D /* StockWasteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockWasteView.swift; sourceTree = "<group>"; };
 		47B8E53EE3330F14B863D7DB /* SolitaireGlass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SolitaireGlass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B8E7E69872C4F04768F5D06 /* SolitaireGameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolitaireGameTests.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 		BF098CF332C3A8DB7F090014 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				358928EA999247E69CFF8494 /* AppIcon.icns */,
 				97DAB6B6533FA59692CB086D /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -249,6 +252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F5E48C1104FA22EE6063CA3 /* AppIcon.icns in Resources */,
 				02063556878B3AF11CC6FAAD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -314,6 +318,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Solitaire Glass";
+				INFOPLIST_KEY_CFBundleIconFile = AppIcon;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -418,6 +423,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Solitaire Glass";
+				INFOPLIST_KEY_CFBundleIconFile = AppIcon;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

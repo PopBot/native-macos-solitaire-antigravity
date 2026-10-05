@@ -16,6 +16,7 @@ DerivedData/
 
 # Build and profiling
 build/
+dist/
 *.profraw
 *.profdata
 *.mode1v3

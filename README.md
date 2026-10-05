@@ -86,7 +86,24 @@ Accessible via **Preferences / Settings** (`Cmd+,`):
 - Xcode 16.0+ (or Apple Command Line Tools)
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) (optional, if you want to regenerate the `.xcodeproj` from `project.yml`)
 
-### Method 1: Running in Xcode (Recommended)
+### Method 1: 1-Click Install to Applications (Easiest)
+Run the provided installer script to build the Release configuration, copy to `/Applications/Solitaire Glass.app`, register with LaunchServices, and launch it:
+
+```bash
+./scripts/install-app.sh
+```
+
+### Method 2: Package Release App & DMG Installer
+To compile the standalone Release `.app` and generate a drag-and-drop `.dmg`:
+
+```bash
+./scripts/package-app.sh
+```
+Outputs:
+- **Application Bundle**: `dist/Solitaire Glass.app`
+- **Installer DMG**: `dist/SolitaireGlass-Installer.dmg`
+
+### Method 3: Running in Xcode (Recommended for Development)
 1. Open [`SolitaireGlass.xcodeproj`](SolitaireGlass.xcodeproj) in Xcode:
    ```bash
    open SolitaireGlass.xcodeproj
@@ -94,18 +111,7 @@ Accessible via **Preferences / Settings** (`Cmd+,`):
 2. In the toolbar, ensure the **SolitaireGlass** scheme and **My Mac** destination are selected.
 3. Press **Run** (`Cmd + R`) or click the Play button.
 
-### Method 2: Running via Terminal
-Build and launch the application directly from the command line:
-
-```bash
-# Build the application target
-xcodebuild -project SolitaireGlass.xcodeproj -scheme SolitaireGlass build
-
-# Launch the compiled macOS app
-open $(find ~/Library/Developer/Xcode/DerivedData/SolitaireGlass-* -name "SolitaireGlass.app" | head -n 1)
-```
-
-### Method 3: Running Automated Unit Tests
+### Method 4: Running Automated Unit Tests
 To verify game rules, deck generation, move validations, and statistics:
 ```bash
 xcodebuild -project SolitaireGlass.xcodeproj -scheme SolitaireGlassTests test
