@@ -1,0 +1,40 @@
+name: SolitaireGlass
+options:
+  bundleIdPrefix: com.jarodwong
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+settings:
+  SWIFT_VERSION: "6.0"
+  MACOSX_DEPLOYMENT_TARGET: "14.0"
+  ENABLE_USER_SCRIPT_SANDBOXING: false
+  COMBINE_HIDPI_IMAGES: true
+  PRODUCT_NAME: "SolitaireGlass"
+targets:
+  SolitaireGlass:
+    type: application
+    platform: macOS
+    sources:
+      - Sources
+      - Resources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.jarodwong.SolitaireGlass
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026. All rights reserved."
+      INFOPLIST_KEY_CFBundleDisplayName: "Solitaire Glass"
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_REQUIRED: "NO"
+      CODE_SIGN_ENTITLEMENTS: ""
+      ENABLE_HARDENED_RUNTIME: NO
+  SolitaireGlassTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests
+    dependencies:
+      - target: SolitaireGlass
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.jarodwong.SolitaireGlassTests
+      PRODUCT_NAME: SolitaireGlassTests
+      GENERATE_INFOPLIST_FILE: YES

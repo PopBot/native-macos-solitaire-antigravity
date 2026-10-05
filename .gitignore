@@ -1,0 +1,21 @@
+# Xcode
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcuserdatad/
+DerivedData/
+.build/
+*.xcuserstate
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Xcode build files
+build/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
