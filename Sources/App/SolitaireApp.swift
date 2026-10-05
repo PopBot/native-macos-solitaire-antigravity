@@ -27,20 +27,29 @@ struct SolitaireApp: App {
             }
 
             CommandGroup(replacing: .undoRedo) {
-                Button("Undo") {
-                    viewModel.undo()
-                }
-                .keyboardShortcut("z", modifiers: .command)
-                .disabled(!viewModel.canUndo)
+                if settings.allowUndoRedo {
+                    Button("Undo") {
+                        viewModel.undo()
+                    }
+                    .keyboardShortcut("z", modifiers: .command)
+                    .disabled(!viewModel.canUndo)
 
-                Button("Redo") {
-                    viewModel.redo()
+                    Button("Redo") {
+                        viewModel.redo()
+                    }
+                    .keyboardShortcut("z", modifiers: [.command, .shift])
+                    .disabled(!viewModel.canRedo)
                 }
-                .keyboardShortcut("z", modifiers: [.command, .shift])
-                .disabled(!viewModel.canRedo)
             }
 
             CommandMenu("Game") {
+                Button(viewModel.isPaused ? "Resume Game" : "Pause Game") {
+                    viewModel.togglePause()
+                }
+                .keyboardShortcut("p", modifiers: .command)
+
+                Divider()
+
                 Button("Draw Card") {
                     viewModel.drawFromStock()
                 }

@@ -14,6 +14,7 @@ public final class SolitaireViewModel: @unchecked Sendable {
     public var elapsedSeconds: Int = 0
     public var isGameWon: Bool = false
     public var isGameActive: Bool = false
+    public var isPaused: Bool = false
     public var wasteRecycleCount: Int = 0
 
     // MARK: - Undo / Redo
@@ -65,6 +66,7 @@ public final class SolitaireViewModel: @unchecked Sendable {
         stopTimer()
         isAutoCompleting = false
         isGameWon = false
+        isPaused = false
         movesCount = 0
         elapsedSeconds = 0
         wasteRecycleCount = 0
@@ -108,6 +110,7 @@ public final class SolitaireViewModel: @unchecked Sendable {
         stopTimer()
         isAutoCompleting = false
         isGameWon = false
+        isPaused = false
         movesCount = 0
         elapsedSeconds = 0
         wasteRecycleCount = 0
@@ -128,13 +131,37 @@ public final class SolitaireViewModel: @unchecked Sendable {
         AudioService.shared.playFlip()
     }
 
+    // MARK: - Pause & Resume
+    public func togglePause() {
+        guard isGameActive, !isGameWon, !isAutoCompleting else { return }
+        if isPaused {
+            resumeGame()
+        } else {
+            pauseGame()
+        }
+    }
+
+    public func pauseGame() {
+        guard isGameActive, !isGameWon, !isAutoCompleting, !isPaused else { return }
+        cancelDrag()
+        clearHint()
+        isPaused = true
+        stopTimer()
+    }
+
+    public func resumeGame() {
+        guard isGameActive, !isGameWon, !isAutoCompleting, isPaused else { return }
+        isPaused = false
+        startTimer()
+    }
+
     // MARK: - Timer Management
     private func startTimer() {
         stopTimer()
         gameTimer = Timer.publish(every: 1.0, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                guard let self = self, self.isGameActive, !self.isGameWon else { return }
+                guard let self = self, self.isGameActive, !self.isGameWon, !self.isPaused else { return }
                 self.elapsedSeconds += 1
             }
     }
@@ -146,7 +173,7 @@ public final class SolitaireViewModel: @unchecked Sendable {
 
     // MARK: - Stock & Waste Actions
     public func drawFromStock() {
-        guard !isGameWon, !isAutoCompleting else { return }
+        guard !isGameWon, !isAutoCompleting, !isPaused else { return }
         clearHint()
 
         if stock.isEmpty {
@@ -199,7 +226,7 @@ public final class SolitaireViewModel: @unchecked Sendable {
 
     // MARK: - Drag and Drop Handling
     public func canDrag(location: CardLocation) -> Bool {
-        guard !isGameWon, !isAutoCompleting else { return false }
+        guard !isGameWon, !isAutoCompleting, !isPaused else { return false }
         switch location {
         case .waste:
             return !waste.isEmpty
@@ -358,15 +385,15 @@ public final class SolitaireViewModel: @unchecked Sendable {
 
     // MARK: - Undo & Redo
     public var canUndo: Bool {
-        !undoStack.isEmpty && !isGameWon && !isAutoCompleting
+        GameSettings.shared.allowUndoRedo && !undoStack.isEmpty && !isGameWon && !isAutoCompleting && !isPaused
     }
 
     public var canRedo: Bool {
-        !redoStack.isEmpty && !isGameWon && !isAutoCompleting
+        GameSettings.shared.allowUndoRedo && !redoStack.isEmpty && !isGameWon && !isAutoCompleting && !isPaused
     }
 
     public func undo() {
-        guard let move = undoStack.popLast() else { return }
+        guard canUndo, let move = undoStack.popLast() else { return }
         clearHint()
 
         switch move.type {
@@ -424,7 +451,7 @@ public final class SolitaireViewModel: @unchecked Sendable {
     }
 
     public func redo() {
-        guard let move = redoStack.popLast() else { return }
+        guard canRedo, let move = redoStack.popLast() else { return }
         clearHint()
 
         switch move.type {
@@ -547,7 +574,7 @@ public final class SolitaireViewModel: @unchecked Sendable {
 
     // MARK: - Hint System
     public func requestHint() {
-        guard !isGameWon, !isAutoCompleting else { return }
+        guard !isGameWon, !isAutoCompleting, !isPaused else { return }
         if let hint = HintEngine.findBestHint(stock: stock, waste: waste, foundations: foundations, tableau: tableau) {
             activeHint = hint
             hintTimer?.cancel()

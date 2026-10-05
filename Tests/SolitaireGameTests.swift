@@ -161,4 +161,48 @@ final class SolitaireGameTests: XCTestCase {
         XCTAssertEqual(stats.currentStreak, 0)
         XCTAssertEqual(stats.bestStreak, 1)
     }
+
+    func testPauseAndResumeGame() {
+        let vm = SolitaireViewModel()
+        vm.startNewGame()
+
+        XCTAssertFalse(vm.isPaused)
+        XCTAssertTrue(vm.canDrag(location: .tableau(column: 0, index: 0)))
+
+        // Pause
+        vm.pauseGame()
+        XCTAssertTrue(vm.isPaused)
+        // Board interactions should be blocked while paused
+        XCTAssertFalse(vm.canDrag(location: .tableau(column: 0, index: 0)))
+
+        let stockBefore = vm.stock.count
+        vm.drawFromStock()
+        XCTAssertEqual(vm.stock.count, stockBefore, "Should not draw cards while paused")
+
+        // Resume
+        vm.resumeGame()
+        XCTAssertFalse(vm.isPaused)
+        XCTAssertTrue(vm.canDrag(location: .tableau(column: 0, index: 0)))
+    }
+
+    func testAllowUndoRedoSetting() {
+        let vm = SolitaireViewModel()
+        vm.startNewGame()
+
+        let ace = Card(suit: .hearts, rank: .ace, isFaceUp: true)
+        vm.tableau[0] = [ace]
+        vm.executeMove(cards: [ace], from: .tableau(column: 0, index: 0), to: .foundation(index: 0))
+
+        GameSettings.shared.allowUndoRedo = true
+        XCTAssertTrue(vm.canUndo)
+
+        // Disable Undo/Redo in settings
+        GameSettings.shared.allowUndoRedo = false
+        XCTAssertFalse(vm.canUndo)
+        XCTAssertFalse(vm.canRedo)
+
+        // Re-enable
+        GameSettings.shared.allowUndoRedo = true
+        XCTAssertTrue(vm.canUndo)
+    }
 }

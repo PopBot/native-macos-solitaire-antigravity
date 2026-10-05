@@ -17,6 +17,9 @@ A native macOS Klondike Solitaire game built with **Swift 6** and **SwiftUI**, f
 ### Modern Classic Linen Deck on Midnight Obsidian
 ![Solitaire Glass Dark Theme](docs/screenshots/dark_theme.png)
 
+### Legit Break Pause Overlay
+![Solitaire Glass Pause Overlay](docs/screenshots/pause_overlay.png)
+
 ---
 
 ## 🎮 How the Game Works
@@ -48,7 +51,8 @@ Solitaire Glass implements the complete, authentic rules of classic **Klondike S
   - Each card placed into the foundation awards `+$5`. Maximum profit: `+$208`.
 
 ### 4. Smart Assists & Quality of Life
-- **Unlimited Undo & Redo** (`Cmd+Z`, `Cmd+Shift+Z`): Reverses moves, score changes, and flipped cards seamlessly.
+- **Pause & Resume Timer** (`Cmd+P`): Need to step away? Click the pause button in the HUD or press `Cmd+P`. A frosted glass modal freezes the timer and hides active cards so your timed score remains honest. Click "Resume" to jump right back in.
+- **Configurable Undo & Redo** (`Cmd+Z`, `Cmd+Shift+Z`): Seamlessly reverses moves, score changes, and flipped cards. Can be disabled in Settings for players seeking strict tournament-style gameplay.
 - **Smart Hint System** (`Cmd+H`): Analyzes the board in real-time to find safe foundation transfers, hidden card revelations, or stock draws.
 - **Auto-Finish Button** (`Cmd+Shift+A`): Appears automatically when all cards on the tableau are face up and the stock/waste are cleared, cascading the remaining cards to the foundations.
 - **Celebratory Win Cascade**: Iconic 60/120fps physics simulation with gravity and card trail stamping when the game is won.
@@ -68,6 +72,8 @@ Accessible via **Preferences / Settings** (`Cmd+,`):
 | **Card Back Design** | Geometric Glass, Royal Sapphire, Crimson Velvet, Obsidian Minimal, or **Custom Image** |
 | **Draw Mode** | Draw 1 (Casual) or Draw 3 (Challenging) |
 | **Scoring Mode** | Standard or Vegas |
+| **Enable Game Timer** | Toggle On / Off |
+| **Enable Undo & Redo** | Toggle On / Off (hide buttons & enforce strict moves) |
 | **Audio Controls** | Master sound toggle and volume slider |
 | **Statistics** | Total games, win percentage, current & longest streak, best time, and high scores |
 
@@ -113,9 +119,10 @@ xcodebuild -project SolitaireGlass.xcodeproj -scheme SolitaireGlassTests test
 | :--- | :--- |
 | `Cmd + N` | Start New Game |
 | `Cmd + R` | Restart Current Game (same deal) |
+| `Cmd + P` | Pause / Resume Timer (Legit Break) |
 | `Space` | Draw Card(s) from Stock / Recycle Waste |
-| `Cmd + Z` | Undo Move |
-| `Cmd + Shift + Z` | Redo Move |
+| `Cmd + Z` | Undo Move (when enabled) |
+| `Cmd + Shift + Z` | Redo Move (when enabled) |
 | `Cmd + H` | Request Strategic Hint |
 | `Cmd + Shift + A` | Auto Finish (available when all cards are face up) |
 | `Cmd + ,` | Open Preferences & Theme Customization |

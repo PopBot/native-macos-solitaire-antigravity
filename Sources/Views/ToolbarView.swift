@@ -44,12 +44,32 @@ public struct ToolbarView: View {
                     value: "\(viewModel.movesCount)"
                 )
 
-                // Timer
+                // Timer with Pause / Resume button
                 if settings.timerEnabled {
-                    hudBadge(
-                        title: "TIME",
-                        value: formatTime(viewModel.elapsedSeconds)
-                    )
+                    Button {
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
+                            viewModel.togglePause()
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            hudBadge(
+                                title: viewModel.isPaused ? "PAUSED" : "TIME",
+                                value: formatTime(viewModel.elapsedSeconds),
+                                isAccent: viewModel.isPaused
+                            )
+
+                            Image(systemName: viewModel.isPaused ? "play.fill" : "pause.fill")
+                                .font(.system(size: 10, weight: .semibold))
+                                .foregroundStyle(viewModel.isPaused ? Color.yellow : Color.white.opacity(0.75))
+                                .padding(5)
+                                .background(
+                                    Circle()
+                                        .fill(Color.white.opacity(0.1))
+                                )
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .help(viewModel.isPaused ? "Resume Timer (Cmd+P)" : "Pause Timer (Cmd+P)")
                 }
             }
 
@@ -78,32 +98,34 @@ public struct ToolbarView: View {
                 } label: {
                     Label("Hint", systemImage: "lightbulb")
                 }
+                .disabled(viewModel.isPaused)
                 .keyboardShortcut("h", modifiers: .command)
                 .buttonStyle(GlassToolbarButtonStyle())
 
-                // Undo Button
-                Button {
-                    withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
-                        viewModel.undo()
+                // Undo & Redo Buttons (enabled via Settings)
+                if settings.allowUndoRedo {
+                    Button {
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
+                            viewModel.undo()
+                        }
+                    } label: {
+                        Label("Undo", systemImage: "arrow.uturn.backward")
                     }
-                } label: {
-                    Label("Undo", systemImage: "arrow.uturn.backward")
-                }
-                .disabled(!viewModel.canUndo)
-                .keyboardShortcut("z", modifiers: .command)
-                .buttonStyle(GlassToolbarButtonStyle())
+                    .disabled(!viewModel.canUndo)
+                    .keyboardShortcut("z", modifiers: .command)
+                    .buttonStyle(GlassToolbarButtonStyle())
 
-                // Redo Button
-                Button {
-                    withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
-                        viewModel.redo()
+                    Button {
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
+                            viewModel.redo()
+                        }
+                    } label: {
+                        Label("Redo", systemImage: "arrow.uturn.forward")
                     }
-                } label: {
-                    Label("Redo", systemImage: "arrow.uturn.forward")
+                    .disabled(!viewModel.canRedo)
+                    .keyboardShortcut("z", modifiers: [.command, .shift])
+                    .buttonStyle(GlassToolbarButtonStyle())
                 }
-                .disabled(!viewModel.canRedo)
-                .keyboardShortcut("z", modifiers: [.command, .shift])
-                .buttonStyle(GlassToolbarButtonStyle())
             }
         }
         .padding(.horizontal, 20)
@@ -130,15 +152,15 @@ public struct ToolbarView: View {
         return "\(viewModel.score)"
     }
 
-    private func hudBadge(title: String, value: String) -> some View {
+    private func hudBadge(title: String, value: String, isAccent: Bool = false) -> some View {
         VStack(spacing: 2) {
             Text(title)
                 .font(.system(size: 9, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.white.opacity(0.55))
+                .foregroundStyle(isAccent ? Color.yellow.opacity(0.9) : Color.white.opacity(0.55))
 
             Text(value)
                 .font(.system(size: 15, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.white)
+                .foregroundStyle(isAccent ? Color.yellow : .white)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 4)
@@ -147,7 +169,7 @@ public struct ToolbarView: View {
                 .fill(Color.black.opacity(0.25))
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(Color.white.opacity(0.1), lineWidth: 0.5)
+                        .strokeBorder(isAccent ? Color.yellow.opacity(0.5) : Color.white.opacity(0.1), lineWidth: 0.5)
                 )
         )
     }

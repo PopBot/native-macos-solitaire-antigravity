@@ -144,6 +144,10 @@ public final class GameSettings: @unchecked Sendable {
         didSet { defaults.set(cardBackTheme.rawValue, forKey: "cardBackTheme") }
     }
 
+    public var allowUndoRedo: Bool {
+        didSet { defaults.set(allowUndoRedo, forKey: "allowUndoRedo") }
+    }
+
     public var customBackgroundImageData: Data? {
         didSet { defaults.set(customBackgroundImageData, forKey: "customBackgroundImageData") }
     }
@@ -160,6 +164,7 @@ public final class GameSettings: @unchecked Sendable {
         self.scoringMode = ScoringMode(rawValue: scoreStr) ?? .standard
 
         self.timerEnabled = defaults.object(forKey: "timerEnabled") != nil ? defaults.bool(forKey: "timerEnabled") : true
+        self.allowUndoRedo = defaults.object(forKey: "allowUndoRedo") != nil ? defaults.bool(forKey: "allowUndoRedo") : true
         self.soundEnabled = defaults.object(forKey: "soundEnabled") != nil ? defaults.bool(forKey: "soundEnabled") : true
 
         let vol = defaults.double(forKey: "soundVolume")

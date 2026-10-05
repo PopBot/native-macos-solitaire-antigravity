@@ -47,6 +47,8 @@ public struct SettingsView: View {
                 .pickerStyle(.segmented)
 
                 Toggle("Enable Game Timer", isOn: $settings.timerEnabled)
+
+                Toggle("Enable Undo & Redo", isOn: $settings.allowUndoRedo)
             }
 
             Section("Audio & Feedback") {

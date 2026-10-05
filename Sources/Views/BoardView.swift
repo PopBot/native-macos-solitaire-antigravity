@@ -82,6 +82,12 @@ public struct BoardView: View {
                 WinCascadeView(viewModel: viewModel)
                     .transition(.opacity)
             }
+
+            // Pause Overlay
+            if viewModel.isPaused {
+                pauseOverlay
+                    .transition(.opacity)
+            }
         }
         .coordinateSpace(name: coordinateSpaceName)
         .onPreferenceChange(DropTargetPreferenceKey.self) { list in
@@ -89,6 +95,106 @@ public struct BoardView: View {
                 viewModel.registerDropTarget(location: item.location, frame: item.frame)
             }
         }
+    }
+
+    // MARK: - Pause Overlay
+    private var pauseOverlay: some View {
+        ZStack {
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .overlay(Color.black.opacity(0.4))
+                .ignoresSafeArea()
+
+            VStack(spacing: 18) {
+                Image(systemName: "pause.circle.fill")
+                    .font(.system(size: 46, weight: .light))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.yellow, Color.orange],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+
+                Text("Game Paused")
+                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+
+                Text("Take a legit break. Your timer and cards are frozen.")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(Color.white.opacity(0.7))
+
+                HStack(spacing: 16) {
+                    VStack {
+                        Text("TIME")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.white.opacity(0.55))
+                        Text(formatTime(viewModel.elapsedSeconds))
+                            .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.white.opacity(0.08))
+                    )
+
+                    VStack {
+                        Text("SCORE")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.white.opacity(0.55))
+                        Text("\(viewModel.score)")
+                            .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.white.opacity(0.08))
+                    )
+                }
+
+                Button {
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.75)) {
+                        viewModel.resumeGame()
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "play.fill")
+                        Text("Resume Game")
+                    }
+                    .font(.headline)
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 26)
+                    .padding(.vertical, 10)
+                    .background(
+                        Capsule()
+                            .fill(Color.yellow)
+                            .shadow(color: Color.yellow.opacity(0.4), radius: 8)
+                    )
+                }
+                .buttonStyle(.plain)
+                .keyboardShortcut("p", modifiers: .command)
+            }
+            .padding(30)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.regularMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .strokeBorder(Color.white.opacity(0.25), lineWidth: 1)
+                    )
+                    .shadow(color: Color.black.opacity(0.4), radius: 24)
+            )
+        }
+    }
+
+    private func formatTime(_ seconds: Int) -> String {
+        let mins = seconds / 60
+        let secs = seconds % 60
+        return String(format: "%02d:%02d", mins, secs)
     }
 
     // MARK: - Floating Dragged Cards
